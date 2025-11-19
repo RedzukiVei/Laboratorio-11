@@ -1,16 +1,16 @@
-**Laboratorio 11 - Análisis Semántico: Conversión implícita int → bool**
+## Laboratorio 11 - Análisis Semántico: Conversión implícita int → bool
 
 Se modificó únicamente el archivo ast.cpp para permitir la conversión automática de valores enteros a booleanos:
 - 0 → false
 - Cualquier otro entero → true
 
-**Cambios realizados:**
+## Cambios realizados:
 1. Logical::Logical → acepta int en && y ||
 2. UnaryExpr::UnaryExpr → acepta ! con operandos int
 3. Assign::Assign → permite asignar int a variable bool
 4. If/While/DoWhile → validación explícita (rechaza float)
 
-**Pruebas realizadas:**
+## Pruebas realizadas:
 - Conversión implícita: ACEPTADA
 - Uso de float en if: RECHAZADO correctamente
 - Asignación bool → int: RECHAZADO correctamente
