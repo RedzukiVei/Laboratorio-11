@@ -127,11 +127,14 @@ Arithmetic::Arithmetic(int etype, Token *t, Expression *e1, Expression *e2) : Ex
 
 UnaryExpr::UnaryExpr(int etype, Token *t, Expression *e) : Expression(NodeType::UNARY, etype, t), expr(e)
 {
-    // verificacion de tipos
+    if (expr->type == ExprType::INT) {
+        expr->type = ExprType::BOOL;
+    }
+    
     if (expr->type != ExprType::BOOL)
     {
         stringstream ss;
-        ss << "\'" << token->lexeme << "\' usado con operando no booleano ("
+        ss << "\'" << token->lexeme << "\' usado con operando no convertible a booleano ("
            << expr->Name() << ":" << expr->Type() << ")";
         throw SyntaxError{scanner->Lineno(), ss.str()};
     }
@@ -149,11 +152,11 @@ Seq::Seq(Statement *s, Statement *ss) : Statement(NodeType::SEQ), stmt(s), stmts
 
 Assign::Assign(Expression *i, Expression *e) : Statement(NodeType::ASSIGN), id(i), expr(e)
 {
-    // verificacion de tipos
-    if (id->type != expr->type)
+    if (id->type != expr->type &&
+        !(id->type == ExprType::BOOL && expr->type == ExprType::INT))
     {
         stringstream ss;
-        ss << "\'=\' usado con operandos de tipos diferentes ("
+        ss << "\'=\' usado con tipos incompatibles ("
            << id->Name() << ":" << id->Type() << ") ("
            << expr->Name() << ":" << expr->Type() << ") ";
         throw SyntaxError{scanner->Lineno(), ss.str()};
