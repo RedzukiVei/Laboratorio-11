@@ -73,11 +73,14 @@ Access::Access(int etype, Token * t, Expression * i, Expression * e): Expression
 
 Logical::Logical(Token *t, Expression *e1, Expression *e2) : Expression(NodeType::LOG, ExprType::BOOL, t), expr1(e1), expr2(e2)
 {
-    // verificacion de tipos
-    if (expr1->type != ExprType::BOOL || expr2->type != ExprType::BOOL)
+
+    bool op1_ok = (expr1->type == ExprType::BOOL || expr1->type == ExprType::INT);
+    bool op2_ok = (expr2->type == ExprType::BOOL || expr2->type == ExprType::INT);
+
+    if (!op1_ok || !op2_ok)
     {
         stringstream ss;
-        ss << "\'" << token->lexeme << "\' usado con operandos no booleanos ("
+        ss << "\'" << token->lexeme << "\' usado con operando no convertible a booleano ("
            << expr1->Name() << ":" << expr1->Type() << ") ("
            << expr2->Name() << ":" << expr2->Type() << ") ";
         throw SyntaxError{scanner->Lineno(), ss.str()};
