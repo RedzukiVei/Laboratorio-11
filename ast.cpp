@@ -167,16 +167,38 @@ Assign::Assign(Expression *i, Expression *e) : Statement(NodeType::ASSIGN), id(i
 // If
 // ----
 
-If::If(Expression *e, Statement *s) : Statement(NodeType::IF_STMT), expr(e), stmt(s) {}
-
+If::If(Expression *e, Statement *s) : Statement(NodeType::IF_STMT), expr(e), stmt(s)
+{
+    if (e->type != ExprType::BOOL && e->type != ExprType::INT)
+    {
+        stringstream ss;
+        ss << "Condición de 'if' debe ser booleana o entera, no " << e->Type();
+        throw SyntaxError{scanner->Lineno(), ss.str()};
+    }
+}
 // -----
 // While
 // -----
 
-While::While(Expression *e, Statement *s) : Statement(NodeType::WHILE_STMT), expr(e), stmt(s) {}
-
+While::While(Expression *e, Statement *s) : Statement(NodeType::WHILE_STMT), expr(e), stmt(s)
+{
+    if (e->type != ExprType::BOOL && e->type != ExprType::INT)
+    {
+        stringstream ss;
+        ss << "Condición de 'while' debe ser booleana o entera, no " << e->Type();
+        throw SyntaxError{scanner->Lineno(), ss.str()};
+    }
+}
 // --------
 // Do-While
 // --------
 
-DoWhile::DoWhile(Statement *s, Expression *e) : Statement(NodeType::DOWHILE_STMT), stmt(s), expr(e) {}
+DoWhile::DoWhile(Statement *s, Expression *e) : Statement(NodeType::DOWHILE_STMT), stmt(s), expr(e)
+{
+    if (e->type != ExprType::BOOL && e->type != ExprType::INT)
+    {
+        stringstream ss;
+        ss << "Condición de 'do-while' debe ser booleana o entera, no " << e->Type();
+        throw SyntaxError{scanner->Lineno(), ss.str()};
+    }
+}
